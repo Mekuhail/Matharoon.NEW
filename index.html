@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "url": "https://www.matharoon.com",
+          "logo": "https://www.matharoon.com/matharoonLogo.png",
+          "name": "Matharoon"
+        }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3083437636248645"
+        crossorigin="anonymous"></script>
+    <link rel="icon" href="matharoonLogo.png" type="image/png" />
+    <meta charset="UTF-8" />
+    <meta name="description"
+        content="Matharoon is an interactive learning platform where kids and students play fun math games. Join now!">
+    <title>Matharoon - Fun Math Games & Learning Platform</title>
+    <style>
+        /* =================================
+           BASE (Dark Mode) STYLING
+           ================================= */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            /* background: url('background-pattern.png'), linear-gradient(145deg, #6A0DAD, #E67E22); */
+            /* Original background removed for canvas */
+            background-color: #1a092a;
+            /* Fallback dark background */
+            /* background-size: cover; */
+            /* background-blend-mode: overlay; */
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+            position: relative;
+            /* Needed for z-indexed children */
+        }
+
+        #animatedBackgroundCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Behind all other content */
+            pointer-events: none;
+            /* Make sure it doesn't interfere with clicks */
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 30px;
+            background-color: rgba(58, 30, 86, 0.95);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            transition: background-color 0.4s ease;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 70px;
+        }
+
+        .message-box {
+            background: #6A0DAD;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+            margin-right: 15px;
+        }
+
+        .message-box:hover {
+            transform: scale(1.1);
+            color: #fff;
+        }
+
+        .message-menu {
+            display: none;
+            /* Hidden by default */
+            background: #f1f1f1;
+            color: #333;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            position: absolute;
+            /* Adjust position as needed */
+            top: 60px;
+            /* Example: position below the image */
+            right: 15px;
+            width: 200px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* About Us */
+        .about-us {
+            background: #6A0DAD;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .about-us:hover {
+            transform: scale(1.1);
+            color: #fff;
+        }
+
+        /* Account Menu */
+        .menu {
+            position: relative;
+            margin-right: 38px;
+        }
+
+        .account {
+            background: #E67E22;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .account:hover {
+            background: #D35400;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 43.2px;
+            background: white;
+            color: #6A0DAD;
+            width: 150px;
+            /* Adjusted width for new item */
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+
+        .dropdown a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #6A0DAD;
+            font-weight: bold;
+        }
+
+        .dropdown a:hover {
+            background: #E67E22;
+            color: white;
+        }
+
+        .menu:hover .dropdown {
+            display: block;
+        }
+
+        .icon-right {
+            width: 20px;
+            height: 20px;
+            margin-left: 15px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: #6A0DAD;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background-color: #4b0c7d;
+        }
+
+        /* Container for content - ensure it's above the canvas */
+        .container {
+            margin-top: 80px;
+            /* Adjusted for navbar */
+            padding-bottom: 60px;
+            /* Space for news box if it's at the bottom */
+            width: 90%;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            position: relative;
+            /* To ensure it's above the fixed canvas */
+            z-index: 1;
+        }
+
+        /* Main Title replacement: now using an image */
+        .main-title {
+            max-width: 60%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        /* Sections row (Get Started & Leaderboard) */
+        .sections-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .section {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(230, 126, 34, 0.5);
+        }
+
+        .section:hover {
+            transform: scale(1.02);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #6a0a96;
+            text-shadow: 2px 2px 4px rgba(230, 126, 34, 0.7);
+        }
+
+        .section p {
+            color: #a4a3a3;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Button Image Styling with orange drop-shadow */
+        .button-img {
+            margin-top: 15px;
+            cursor: pointer;
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(230, 126, 34, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .button-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(230, 126, 34, 0.8);
+        }
+
+        /* News Box Styles */
+        #newsBox {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            width: 300px;
+            max-height: 150px;
+            background-color: rgba(40, 20, 60, 0.9);
+            color: #e0e0e0;
+            border: 1px solid #E67E22;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            font-size: 0.9em;
+            text-align: left;
+            z-index: 1001;
+            /* Above background, potentially above other fixed elements if needed */
+        }
+
+        #newsBox h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #E67E22;
+            font-size: 1.1em;
+        }
+
+        #newsBox ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #newsBox li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        #newsBox li:last-child {
+            border-bottom: none;
+        }
+
+        #newsBox .news-item-date {
+            font-size: 0.8em;
+            color: #aaa;
+            display: block;
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode {
+            /* background: #f2f2f2; */
+            /* Original light background removed for canvas */
+            background-color: #e0e0e0;
+            /* Fallback light background */
+            color: #333;
+        }
+
+        body.light-mode .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .about-us {
+            background: #6A0DAD;
+            color: #fff;
+        }
+
+        body.light-mode .about-us:hover {
+            background: #4b0c7d;
+        }
+
+        body.light-mode .theme-toggle {
+            background: #E67E22;
+            color: #fff;
+        }
+
+        body.light-mode .theme-toggle:hover {
+            background: #cc3f00;
+        }
+
+        body.light-mode .account {
+            background: #6A0DAD;
+        }
+
+        body.light-mode .account:hover {
+            background: #4b0c7d;
+        }
+
+        body.light-mode .dropdown {
+            background: #fff;
+            color: #6A0DAD;
+        }
+
+        body.light-mode .dropdown a {
+            color: #6A0DAD;
+        }
+
+        body.light-mode .dropdown a:hover {
+            background: #6A0DAD;
+            color: #fff;
+        }
+
+        body.light-mode .section {
+            background: rgba(255, 255, 255, 0.85);
+            color: #333;
+            border: 1px solid rgba(230, 126, 34, 0.4);
+        }
+
+        body.light-mode #newsBox {
+            background-color: rgba(240, 240, 240, 0.95);
+            color: #333;
+            border: 1px solid #6A0DAD;
+        }
+
+        body.light-mode #newsBox h4 {
+            color: #6A0DAD;
+        }
+
+        body.light-mode #newsBox li {
+            border-bottom: 1px solid rgba(106, 13, 173, 0.3);
+        }
+
+        body.light-mode #newsBox .news-item-date {
+            color: #555;
+        }
+
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sections-row {
+                flex-direction: column;
+            }
+
+            #newsBox {
+                width: calc(100% - 20px);
+                /* Full width on smaller screens, with padding */
+                max-height: 100px;
+            }
+        }
+
+        /* Modal Styles (if needed) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #fff;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .modal-button.confirm {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .modal-button.confirm:hover {
+            background-color: #c0392b;
+        }
+
+        .modal-button.cancel {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .modal-button.cancel:hover {
+            background-color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="animatedBackgroundCanvas"></canvas> <!-- Added Canvas for animated background -->
+    <audio id="backgroundMusic" loop>
+        <source src="/bgg_loop.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- News Box -->
+    <div id="newsBox">
+        <h4>Latest News</h4>
+        <ul id="newsList">
+            <!-- News items will be populated here by JavaScript -->
+            <li>Loading news...</li>
+        </ul>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="matharoonLogo.png" alt="School Logo" />
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()">Light Mode</button>
+            <a href="aboutUs.html" class="about-us">About Us</a>
+            <div class="menu">
+                <button class="account" id="accountBtn">Account ▼</button>
+                <div class="dropdown" id="accountDropdown">
+                    <a href="logged.html" id="loginLink">
+                        Log In
+                        <img src="/login.png" alt="Login Icon" class="icon-right" />
+                    </a>
+                    <a href="signUp.html" id="signUpLink">
+                        Sign Up
+                        <img src="/add.png" alt="Sign Up Icon" class="icon-right" />
+                    </a>
+                    <a href="/careerHistory.html" id="careerHistoryLink" style="display: none;">
+                        My History
+                        <img src="/history.png" alt="History Icon" class="icon-right" />
+                        <!-- Assuming a history.png icon -->
+                    </a>
+                    <a href="#" id="logoutLink" style="display: none;">
+                        Log Out
+                        <img src="/logout.png" alt="Logout Icon" class="icon-right" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Main title replaced with the PNG image -->
+        <img src="matharoonCom.png" alt="Matharoon" class="main-title">
+        <div class="sections-row">
+            <div class="section">
+                <!-- Updated Get Started link with clickable PNG -->
+                <a href="gamePanel.html" id="GameIntroLink" style="text-decoration: none; color: inherit;">
+                    <h2>Start Game</h2>
+                    <p>Challenge yourself with fast-paced math drills and race against the clock!</p>
+                    <img src="getStarted.png" alt="Get Started" class="button-img">
+                </a>
+            </div>
+            <div class="section">
+                <!-- Updated Leaderboard link with clickable PNG -->
+                <a href="leaderboard.html" id="Leaderboard" style="text-decoration: none; color: inherit;">
+                    <h2>Leaderboard</h2>
+                    <p>Check out the top scorers!</p>
+                    <img src="viewLeaderboard.png" alt="View Leaderboard" class="button-img">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal-content">
+            <h2>Are you sure you want to log out?</h2>
+            <div class="modal-buttons">
+                <button class="modal-button confirm" id="confirmLogoutBtn">Log Out</button>
+                <button class="modal-button cancel" id="cancelLogoutBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for toggling Light/Dark Mode and auth checking -->
+    <script src="intro.js"></script>
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore-compat.js"></script>
+    <!-- Added Firestore -->
+    <!-- Your firebase.js -->
+    <script src="firebase.js"></script>
+    <!-- Animated Background Script -->
+    <script src="animatedBackground.js"></script>
+
+    <script>
+        // Ensure that the DOM is loaded.
+        document.addEventListener("DOMContentLoaded", function () {
+            // Intercept click on Get Started link.
+            const gameIntroLink = document.getElementById("GameIntroLink");
+            gameIntroLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                // Check Firebase Authentication state.
+                firebase.auth().onAuthStateChanged(function (user) {
+                    if (user) {
+                        // User is logged in; proceed to gameIntro.html.
+                        window.location.href = "gamePanel.html";
+                    } else {
+                        // Not logged in; redirect to signUp.html.
+                        window.location.href = "signUp.html";
+                    }
+                });
+            });
+
+            // Account modal and other auth UI code
+            const accountBtn = document.getElementById("accountBtn");
+            const loginLink = document.getElementById("loginLink");
+            const signUpLink = document.getElementById("signUpLink");
+            const careerHistoryLink = document.getElementById("careerHistoryLink");
+            const logoutLink = document.getElementById("logoutLink");
+            const logoutModal = document.getElementById("logoutModal");
+            const confirmLogoutBtn = document.getElementById("confirmLogoutBtn");
+            const cancelLogoutBtn = document.getElementById("cancelLogoutBtn");
+
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    loginLink.style.display = "none";
+                    signUpLink.style.display = "none";
+                    careerHistoryLink.style.display = "flex"; // Show history link when logged in
+                    logoutLink.style.display = "flex";
+                    // Use Firestore for user data if available, otherwise fallback or use Realtime DB as before
+                    const userDocRef = firebase.firestore().collection("users").doc(user.uid);
+                    userDocRef.get().then((doc) => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            const displayName = userData.displayName || userData.fullName || "My Account"; // Check for displayName first
+                            accountBtn.textContent = displayName + " ▼";
+                        } else {
+                            // Fallback to Realtime Database if not in Firestore or for older users
+                            const dbRef = firebase.database().ref("users/" + user.uid);
+                            dbRef.once("value").then((snapshot) => {
+                                if (snapshot.exists()) {
+                                    const userDataRT = snapshot.val();
+                                    const fullName = userDataRT.fullName || "My Account";
+                                    accountBtn.textContent = fullName + " ▼";
+                                } else {
+                                    accountBtn.textContent = "My Account ▼";
+                                }
+                            });
+                        }
+                    }).catch(error => {
+                        console.error("Error fetching user data for account button:", error);
+                        accountBtn.textContent = "My Account ▼"; // Fallback
+                    });
+                } else {
+                    loginLink.style.display = "flex";
+                    signUpLink.style.display = "flex";
+                    careerHistoryLink.style.display = "none"; // Hide history link when not logged in
+                    logoutLink.style.display = "none";
+                    accountBtn.textContent = "Account ▼";
+                }
+            });
+
+            logoutLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                logoutModal.style.display = "flex";
+            });
+
+            confirmLogoutBtn.addEventListener("click", () => {
+                firebase.auth().signOut().then(() => {
+                    window.location.href = "index.html";
+                }).catch((error) => {
+                    console.error("Logout Error:", error);
+                });
+            });
+
+            cancelLogoutBtn.addEventListener("click", () => {
+                logoutModal.style.display = "none";
+            });
+
+            // Background Music Handler
+            const backgroundMusic = document.getElementById("backgroundMusic");
+            if (backgroundMusic) {
+                let musicPlayedOnce = false;
+                document.body.addEventListener("mousemove", function playMusicOnFirstHover() {
+                    if (!musicPlayedOnce && backgroundMusic.paused) {
+                        backgroundMusic.play().catch(error => console.warn("Music play interrupted or failed:", error));
+                        musicPlayedOnce = true;
+                    }
+                });
+            } else {
+                console.error("Background music element not found.");
+            }
+
+            // News Box Firestore Integration
+            const newsList = document.getElementById("newsList");
+            if (newsList && firebase.firestore) { // Check if firestore is available
+                const dbFirestore = firebase.firestore();
+                dbFirestore.collection("news").orderBy("timestamp", "desc").limit(5) // Get latest 5 news items
+                    .onSnapshot((querySnapshot) => {
+                        newsList.innerHTML = ''; // Clear existing news
+                        if (querySnapshot.empty) {
+                            newsList.innerHTML = '<li>No news available at the moment.</li>';
+                            return;
+                        }
+                        querySnapshot.forEach((doc) => {
+                            const newsItem = doc.data();
+                            const date = newsItem.timestamp ? new Date(newsItem.timestamp.seconds * 1000).toLocaleDateString() : 'N/A';
+                            listItem.innerHTML = `${newsItem.title || 'Untitled News'} <span class="news-item-date">(${date})</span><br>${newsItem.content || ''}`;
+                            newsList.appendChild(listItem);
+                        });
+                    }, (error) => {
+                        console.error("Error fetching news: ", error);
+                        newsList.innerHTML = '<li>Error loading news.</li>';
+                    });
+            } else {
+                if (!newsList) console.error("News list element not found.");
+                if (!firebase.firestore) console.error("Firestore is not initialized or available.");
+                if (newsList) newsList.innerHTML = '<li>News feature is currently unavailable.</li>';
+            }
+        });
+    </script>
+</body>
+
+</html>

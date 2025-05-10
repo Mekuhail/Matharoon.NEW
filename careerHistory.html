@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career History - Matharoon</title>
+    <link rel="icon" href="/matharoonLogo.png" type="image/png" />
+    <link rel="stylesheet" href="/styles.css"> <!-- Assuming a global stylesheet -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a092a;
+            /* Dark theme background */
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(58, 30, 86, 0.85);
+            /* Darker purple, semi-transparent */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #E67E22;
+            /* Orange accent */
+            margin-bottom: 20px;
+        }
+
+        .game-history {
+            margin-bottom: 30px;
+        }
+
+        .game-history h2 {
+            color: #E67E22;
+            border-bottom: 2px solid #E67E22;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .grade-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .grade-section th,
+        .grade-section td {
+            border: 1px solid #4b0c7d;
+            /* Darker purple border */
+            padding: 8px;
+            text-align: left;
+        }
+
+        .grade-section th {
+            background-color: #4b0c7d;
+            /* Darker purple header */
+            color: white;
+        }
+
+        .grade-section tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .no-history {
+            text-align: center;
+            font-style: italic;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- Navbar content from index.html, ensure paths are correct -->
+    </nav>
+
+    <div class="container">
+        <h1>Career History</h1>
+        <div id="historyContainer">
+            <!-- History data will be populated here by JavaScript -->
+            <p class="no-history">Loading history...</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore-compat.js"></script>
+    <script src="/firebase.js"></script> <!-- Assuming firebase.js is at root -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const historyContainer = document.getElementById("historyContainer");
+            const currentUser = firebase.auth().currentUser;
+
+            if (!currentUser) {
+                historyContainer.innerHTML = '<p class="no-history">Please <a href="/logged.html">log in</a> to view your career history.</p>';
+                return;
+            }
+
+            const db = firebase.firestore();
+            const userHistoryRef = db.collection("users").doc(currentUser.uid).collection("history");
+
+            userHistoryRef.orderBy("timestamp", "desc").get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        historyContainer.innerHTML = '<p class="no-history">No game history found.</p>';
+                        return;
+                    }
+
+                    let html = '';
+                    const gamesData = {}; // To group by game, then grade
+
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const gameName = data.gameName || "Unknown Game";
+                        const grade = data.grade || "N/A";
+                        const level = data.level || "N/A"; // Assuming level might be part of history
+                        const score = data.score !== undefined ? data.score : "N/A";
+                        const time = data.time !== undefined ? data.time : "N/A"; // Assuming time taken is stored
+                        const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString() : "N/A";
+
+                        if (!gamesData[gameName]) {
+                            gamesData[gameName] = {};
+                        }
+                        if (!gamesData[gameName][`Grade ${grade} - Level ${level}`]) {
+                            gamesData[gameName][`Grade ${grade} - Level ${level}`] = [];
+                        }
+                        gamesData[gameName][`Grade ${grade} - Level ${level}`].push({ date, score, time });
+                    });
+
+                    for (const game in gamesData) {
+                        html += `<div class="game-history"><h2>${game}</h2>`;
+                        for (const gradeLevel in gamesData[game]) {
+                            html += `<div class="grade-section"><h3>${gradeLevel}</h3><table><thead><tr><th>Date</th><th>Score</th><th>Time (seconds)</th></tr></thead><tbody>`;
+                            gamesData[game][gradeLevel].forEach(run => {
+                                html += `<tr><td>${run.date}</td><td>${run.score}</td><td>${run.time}</td></tr>`;
+                            });
+                            html += '</tbody></table></div>';
+                        }
+                        html += '</div>';
+                    }
+                    historyContainer.innerHTML = html;
+                })
+                .catch((error) => {
+                    console.error("Error fetching user history: ", error);
+                    historyContainer.innerHTML = '<p class="no-history">Error loading history. Please try again later.</p>';
+                });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "url": "https://www.matharoon.com",
+          "logo": "https://www.matharoon.com/matharoonLogo.png",
+          "name": "Matharoon"
+        }
+    </script>
+    <link rel="icon" href="matharoonLogo.svg" type="image/png" />
+    <meta charset="UTF-8" />
+    <title>Sign Up | Run a math marathoon Today</title>
+    <!-- Add your Google client ID here -->
+    <meta name="google-signin-client_id"
+        content="469147461208-t8qvufef54kiq7jch2v390db28v3ebck.apps.googleusercontent.com">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #dbd8d9;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            background: #f9f9f9;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 900px;
+            overflow: hidden;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .form-section h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group label {
+            margin-left: 5px;
+            font-weight: 600;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .error {
+            color: red;
+            margin-left: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .form-section button {
+            padding: 12px 20px;
+            background: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .form-section button:hover:enabled {
+            background: #0056b3;
+        }
+
+        .form-section button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .already-member {
+            margin-top: 18px;
+        }
+
+        .image-section {
+            flex: 1;
+            background: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #f9f9f9;
+        }
+
+        .image-section a {
+            display: inline-block;
+        }
+
+        .image-section-png {
+            max-width: 80%;
+        }
+
+        /* Styling for the Google Sign-In button container */
+        .google-signin-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left side: Form and Google Sign-In -->
+        <div class="form-section">
+            <h1>Sign up</h1>
+
+            <!-- Google Sign-In Button -->
+            <div class="google-signin-container">
+                <div id="my-signin2"></div>
+            </div>
+
+            <!-- Sign up form -->
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="name">
+                        Username (max 15 characters) <span id="name-error" class="error">!</span>
+                    </label>
+                    <input type="text" id="name" name="name" autocomplete="name" placeholder="Your Name" />
+                </div>
+                <div class="form-group">
+                    <label for="email">
+                        Your Email <span id="email-error" class="error">!</span>
+                    </label>
+                    <input type="email" id="email" name="email" autocomplete="email" placeholder="Your Email" />
+                </div>
+                <div class="form-group">
+                    <label for="password">
+                        Password (min 8 characters) <span id="password-error" class="error">!</span>
+                    </label>
+                    <input type="password" id="password" name="password" autocomplete="new-password"
+                        placeholder="NonReal-Password" />
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">
+                        Confirm Your Password <span id="confirm-password-error" class="error">!</span>
+                    </label>
+                    <input type="password" id="confirm-password" name="confirm-password" autocomplete="new-password"
+                        placeholder="Repeat your password" />
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" />
+                    <label for="terms">
+                        I agree to all
+                        <a href="terms.html" target="_blank">Terms and Conditions</a>
+                        <span id="terms-error" class="error">!</span>
+                    </label>
+                </div>
+                <button type="submit" disabled>Register</button>
+            </form>
+            <div class="already-member">
+                <a href="logged.html">I already have an account</a>
+            </div>
+        </div>
+
+        <!-- Right side: Clickable Logo -->
+        <div class="image-section">
+            <a href="index.html">
+                <img src="matharoonLogo.svg" alt="Sign Up Icon" class="image-section-png">
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database-compat.js"></script>
+    <script src="firebase.js"></script>
+
+    <!-- Google Platform Library (calls renderButton on load) -->
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+    <!-- Your sign-up script -->
+    <script src="signUp.js"></script>
+</body>
+
+</html>

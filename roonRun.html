@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoonRun - Matharoon</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Assuming general styles can be reused -->
+    <link rel="stylesheet" href="/roonRun.css">
+    <!-- Firebase and other common scripts might be needed later -->
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="matharoonCom.png" alt="Matharoon Logo"></a>
+        </div>
+        <div>
+            <span id="userDisplayName">Guest</span>
+            <button id="logoutBtn" class="hidden">Logout</button>
+        </div>
+    </nav>
+
+    <div class="game-container roonrun-container">
+        <h1>RoonRun</h1>
+
+        <div id="difficultySelectorOverlay" class="overlay hidden">
+            <div class="overlay-content">
+                <h2>Choose Difficulty</h2>
+                <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+                <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+            </div>
+        </div>
+
+        <div id="roonRunGameArea">
+            <canvas id="roonRunCanvas"></canvas>
+            <div class="roonrun-ui">
+                <div id="roonRunScore">Score: 0</div>
+                <!-- Other UI elements like lives, etc. -->
+            </div>
+        </div>
+
+        <div id="roonRunGameOverOverlay" class="overlay hidden">
+            <div class="overlay-content">
+                <h2>Game Over!</h2>
+                <p>Your Score: <span id="roonRunFinalScore">0</span></p>
+                <button id="restartRoonRunBtn">Play Again</button>
+                <button onclick="window.location.href='index.html'">Back to Main Menu</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Matharoon. All rights reserved.</p>
+    </footer>
+
+    <script src="/firebase.js"></script> <!-- Assuming firebase is used for user data -->
+    <script src="/roonRun.js"></script>
+</body>
+
+</html>

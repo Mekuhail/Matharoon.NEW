@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "url": "https://www.matharoon.com",
+          "logo": "https://www.matharoon.com/matharoonLogo.png",
+          "name": "Matharoon"
+        }
+    </script>
+    <link rel="icon" href="matharoonLogo.png" type="image/png" />
+    <meta charset="UTF-8" />
+    <meta name="description" content="Check out the top scorers! Join now and see how high you can reach!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Leaderboard - Matharoon</title>
+    <link rel="stylesheet" href="leaderboard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database-compat.js"></script>
+    <script src="firebase.js"></script>
+</head>
+
+<body>
+    <!-- Confetti Container for Animations -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <header class="navbar">
+        <div class="header-container">
+            <h1><span class="trophy-icon">🏆</span> Matharoon Leaderboard</h1>
+            <a href="index.html" class="back-button">← Back to Menu</a>
+        </div>
+    </header>
+
+    <nav class="grade-tabs">
+        <button data-grade="5">Grade 5</button>
+        <button data-grade="6">Grade 6</button>
+        <button data-grade="7">Grade 7</button>
+        <button data-grade="8">Grade 8</button>
+        <button data-grade="9">Grade 9</button>
+        <button data-grade="10">Grade 10</button>
+        <button data-grade="11">Grade 11</button>
+        <button data-grade="12">Grade 12</button>
+    </nav>
+
+    <main class="leaderboard-main">
+        <section class="leaderboard-container">
+            <div id="loading-state" class="loading-message">
+                <div class="loading-spinner"></div>
+                ⏳ Loading leaderboard...
+            </div>
+
+            <!-- Podium Section -->
+            <div class="podium-section">
+                <div class="podium-background"></div>
+                <div class="podium">
+                    <div class="rank-card rank-2">
+                        <span class="position">2</span>
+                        <span class="medal-icon">🥈</span>
+                        <span class="username">---</span>
+                        <span class="score">Score: ---</span>
+                    </div>
+                    <div class="rank-card rank-1">
+                        <span class="position">1</span>
+                        <span class="medal-icon">🥇</span>
+                        <span class="username">---</span>
+                        <span class="score">Score: ---</span>
+                    </div>
+                    <div class="rank-card rank-3">
+                        <span class="position">3</span>
+                        <span class="medal-icon">🥉</span>
+                        <span class="username">---</span>
+                        <span class="score">Score: ---</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expand Toggle -->
+            <div id="leaderboard-expand-wrapper">
+                <button id="toggleLeaderboardBtn">Show Full Leaderboard ▼</button>
+                <ul class="leaderboard-list"></ul>
+            </div>
+
+            <!-- Highlight Panel -->
+            <section class="user-rank-highlight">
+                <h3>Your Stats</h3>
+                <div class="user-stats-grid">
+                    <div class="user-stat-card">
+                        <div class="stat-label">Rank</div>
+                        <div class="stat-value" id="user-rank">N/A</div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-label">Score</div>
+                        <div class="stat-value" id="user-score">N/A</div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-label">Achievement</div>
+                        <div class="stat-value" id="user-achievement">-</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="firebase_integration.js"></script>
+    <script src="leaderboard.js"></script>
+    <script src="accessibility.js"></script>
+</body>
+
+</html>

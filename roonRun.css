@@ -1,0 +1,94 @@
+/* CSS for RoonRun Game */
+
+.roonrun-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative; /* For overlay positioning */
+}
+
+#roonRunGameArea {
+    position: relative;
+    width: 800px; /* Adjust as needed */
+    height: 400px; /* Adjust as needed */
+    border: 2px solid var(--primary-color);
+    margin-bottom: 1rem;
+    background-color: #e0f7fa; /* Light blue sky-like background for the game */
+}
+
+#roonRunCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.roonrun-ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.2rem;
+    color: var(--dark-color);
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Overlay Styles (reusable for difficulty and game over) */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.overlay-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.overlay-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--dark-color);
+}
+
+.overlay-content button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.overlay-content button:hover {
+    background-color: var(--secondary-color);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Specific to RoonRun */
+#difficultySelectorOverlay .difficulty-btn {
+    min-width: 120px;
+}
+
+#roonRunGameOverOverlay p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+

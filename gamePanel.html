@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "url": "https://www.matharoon.com",
+          "logo": "/matharoonLogo.svg",
+          "name": "Matharoon"
+        }
+    </script>
+    <link rel="icon" href="matharoonLogo.png" type="image/png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matharoon - Fun Math Games & Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="accessibility.css">
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database-compat.js"></script>
+    <script src="firebase.js"></script>
+</head>
+
+<body>
+    <!-- Particle Container -->
+    <div id="particleContainer"></div>
+
+    <!-- Theme Background Elements -->
+    <div id="themeBackgroundElements"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="matharoonLogo.png" alt="Matharoon Logo" /></a>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">Light Mode</button>
+    </nav>
+
+    <!-- Sound Toggle -->
+    <div id="soundToggleBtn" class="sound-toggle" title="Sound On">🔊</div>
+
+    <!-- Notification Messages -->
+    <div id="streakMessage" class="message"></div>
+    <div id="achievementMessage" class="message"></div>
+    <div id="levelUpMessage" class="message"></div>
+
+    <!-- Game UI -->
+    <div class="game-container">
+        <div id="gradeSelection">
+            <h1>Math Speed Drill</h1>
+            <div class="grade-grid">
+                <h2 id="gradeTitle">Select Your Grade Level</h2>
+                <div class="grade-options">
+                    <div class="grade-card" data-grade="5">Grade 5</div>
+                    <div class="grade-card" data-grade="6">Grade 6</div>
+                    <div class="grade-card" data-grade="7">Grade 7</div>
+                    <div class="grade-card" data-grade="8">Grade 8</div>
+                    <div class="grade-card" data-grade="9">Grade 9</div>
+                    <div class="grade-card" data-grade="10">Grade 10</div>
+                    <div class="grade-card" data-grade="11">Grade 11</div>
+                    <div class="grade-card" data-grade="12">Grade 12</div>
+                </div>
+
+                <!-- Game Mode Selection -->
+                <div class="game-mode-selection">
+                    <h3>Select Game Mode</h3>
+                    <div class="game-mode-options">
+                        <div class="game-mode-option selected" data-mode="text">
+                            <div class="mode-icon">✏️</div>
+                            <div class="mode-name">Text Input</div>
+                            <div class="mode-description">Type your answers</div>
+                        </div>
+                        <div class="game-mode-option" data-mode="multiple_choice">
+                            <div class="mode-icon">🔢</div>
+                            <div class="mode-name">Multiple Choice</div>
+                            <div class="mode-description">Select from options</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="startGameBtn" disabled class="start-game-btn">🚀 Start Game</button>
+            </div>
+        </div>
+
+        <div id="gameArea" class="hidden">
+            <div class="game-panel">
+                <div class="timer-container" id="timerProgressBar">
+                    <div class="timer-progress" id="timerProgressFill"></div>
+                </div>
+                <div class="timer" id="timerDisplay">2:00</div>
+
+                <div class="game-stats">
+                    <div class="score-container">
+                        <span>Score:</span>
+                        <span id="score" class="score">0</span>
+                    </div>
+
+                    <div class="streak-container">
+                        <span class="streak-flame" id="streakFlame"></span>
+                        <span id="streakCounter" class="streak-counter">0</span>
+                    </div>
+                </div>
+
+                <div class="progress-container" id="progressBar">
+                    <div class="progress-bar" id="progressFill" style="width: 0%"></div>
+                </div>
+
+                <div class="exp-container" id="expBar">
+                    <div class="exp-bar" id="expFill" style="width: 0%"></div>
+                </div>
+                <div class="exp-text" id="expText">Level 1 - 0/100 XP</div>
+
+                <div class="question" id="questionDisplay"></div>
+
+                <!-- Text Input Answer Container -->
+                <div class="answer-container" id="textAnswerContainer">
+                    <input type="number" id="answerInput" placeholder="Enter your answer" />
+                    <button class="answer-btn" id="submitAnswerBtn">Submit</button>
+                </div>
+
+                <!-- Multiple Choice Answer Container -->
+                <div class="answer-container multiple-choice" id="multipleChoiceContainer" style="display: none;">
+                    <div class="choices-container" id="choicesContainer">
+                        <!-- Choice buttons will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <div id="gameOverArea" class="hidden game-over">
+            <h2>Time's Up!</h2>
+
+            <div class="game-stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">Final Score</div>
+                    <div class="stat-value" id="finalScore">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Best Streak</div>
+                    <div class="stat-value" id="finalStreak">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Level Reached</div>
+                    <div class="stat-value" id="finalLevel">1</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Questions Attempted</div>
+                    <div class="stat-value" id="finalQuestions">0</div>
+                </div>
+            </div>
+
+            <!-- Rank Achievements Container -->
+            <div class="achievements-container">
+                <div class="achievements-title">Rank Achievements</div>
+                <div id="rankAchievementsContainer"></div>
+            </div>
+
+            <div class="achievements-container">
+                <div class="achievements-title">Achievements Earned</div>
+                <ul class="achievements-list" id="achievementsList">
+                    <!-- Achievements will be added here dynamically -->
+                </ul>
+            </div>
+
+            <div class="game-over-buttons">
+                <button onclick="window.location.reload()">Play Again</button>
+                <button onclick="window.location.href='index.html'">Return Home</button>
+                <button onclick="window.location.href='leaderboard.html'">View Leaderboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Matharoon - Mental Math Game</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="firebase_integration.js"></script>
+    <script src="rank_achievements.js"></script>
+    <script src="gamepanel.js"></script>
+    <script src="accessibility.js"></script>
+</body>
+
+</html>
+<!-- Countdown Overlay -->
+<div id="countdownOverlay" class="countdown-overlay hidden">
+    <div id="countdownText" class="countdown-text">3</div>
+</div>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="matharoonLogo.png" type="image/png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - Matharoon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color: #f8f4f9;
+            --text-color: #333;
+            --container-bg: #ffffff;
+            --container-text: #333;
+        }
+
+        body.dark-mode {
+            --bg-color: #f1efef;
+            --text-color: #111;
+            --container-bg: #fafafa;
+            --container-text: #222;
+        }
+
+        body.light-mode {
+            --bg-color: #1a082e;
+            --text-color: #eee;
+            --container-bg: #2b1442;
+            --container-text: #eee;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #460c6f;
+            padding: 10px 30px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 60px;
+            max-width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.01px;
+        }
+
+        .theme-toggle,
+        .about-us {
+            background: #E67E22;
+            color: white;
+            border: none;
+            margin-right: 38px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-toggle:hover,
+        .about-us:hover {
+            background: #cc5200;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 100px auto 40px;
+            padding: 20px;
+            background: var(--container-bg);
+            color: var(--container-text);
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        section h2 {
+            font-size: 1.8rem;
+            color: #6A0DAD;
+            margin-bottom: 15px;
+            border-left: 5px solid #E67E22;
+            padding-left: 10px;
+        }
+
+        section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            max-width: 800px;
+            text-align: justify;
+        }
+
+        .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .team-member {
+            background: #f4f4f5;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .team-member {
+            background: #52475cdf;
+        }
+
+        .team-member:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .team-member h3 {
+            color: #b099c0;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 20px;
+            list-style: square;
+        }
+
+        footer {
+            text-align: center;
+            background: #333;
+            color: white;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">
+                <img src="matharoonLogo.png" alt="Matharoon Logo" />
+            </a>
+        </div>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+            <a href="index.html" class="about-us">Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="intro">
+            <h2>Welcome to Matharoon</h2>
+            <p>Matharoon is more than just a competition. It’s a platform where students unlock the fun side of
+                mathematics.</p>
+        </section>
+
+        <section id="who-we-are">
+            <h2>Who We Are</h2>
+            <p>We are a team of high school students passionate about math and community. Matharoon was built to inspire
+                and connect students through a love of problem-solving.</p>
+        </section>
+
+        <section id="vision">
+            <h2>Our Vision</h2>
+            <p>We believe that math is everywhere — not just in books, but in games, logic puzzles, and teamwork. Our
+                goal is to redefine how students view mathematics.</p>
+        </section>
+
+        <section id="creators">
+            <h2>Meet the Creators</h2>
+            <div class="team">
+                <div class="team-member">
+                    <img src="star.png" alt="Kahail" />
+                    <h3>Kahail</h3>
+                    <p>Kahail’s mathematical skill and tech knowledge give Matharoon its aura. He's redefining math
+                        games. No wonder he is known as premium...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mission">
+            <h2>Our Mission</h2>
+            <p>We aim to create a space where students can:</p>
+            <ul>
+                <li>Boost confidence in solving problems</li>
+                <li>Engage in creative math experiences</li>
+                <li>Meet others who love math</li>
+            </ul>
+            <p>...and yes, become a certified “Baqeera.”</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>We love feedback and questions. Reach out anytime:</p>
+            <ul>
+                <li><strong>Kahail:</strong> Mohammed.kahail@ihsan.school</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2025 Matharoon — Made by students, for students.
+    </footer>
+
+    <script src="aboutUs.js"></script>
+    <script src="index.js"></script>
+    <script src="firebase.js"></script>
+</body>
+
+</html>
